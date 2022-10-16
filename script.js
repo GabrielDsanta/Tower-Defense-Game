@@ -89,7 +89,10 @@ function CriarTorre() {
     let Error = false;
     let Nome = String(prompt("Qual o Nome da Torre ?"));
     let Ataque = Number(prompt("Qual o Ataque da Torre ?"));
-    let Alcance = Number(prompt("Qual o Alcance da Torre ?"));
+    let Alcance = Number(prompt("Qual o Alcance da Torre ? (Max 3)"));
+    if (Alcance > 3) {
+        return alert("Alcance inválido");
+    }
     let Nivel = Number(prompt("Qual o Nivel da Torre ?"));
     let Valor = Number(prompt("Qual o Valor da Torre ?"));
     let NewTorre = new Torre(Nome, Ataque, Alcance, Nivel, Valor);
@@ -163,7 +166,7 @@ function ComeçarPartida() {
             alert("Jogador Venceu !");
             FimDeJogo = false;
         }
-        function Verificar(item, index) {
+        function Verificar(item) {
             if (item == undefined) {
                 Contador++;
             }
@@ -171,7 +174,9 @@ function ComeçarPartida() {
     }
 }
 function RemoverInimigo(item, index) {
+    item.GetVida();
     if (item.GetVida() < 0) {
+        console.log(item.GetVida());
         CampoDeBatalha.splice(index, 1, undefined);
     }
 }
@@ -189,6 +194,23 @@ function MoverInimigo() {
 }
 function AtaqueTorre(item, index) {
     if (CampoDeBatalha[index] != undefined) {
+        CampoDeBatalha[index].GetVida();
         CampoDeBatalha[index].ReceberDano(item.Atacar());
+    }
+    if (CampoDeBatalha[index - Torres[index].GetAlcance()]) {
+        CampoDeBatalha[index - Torres[index].GetAlcance()].GetVida();
+        CampoDeBatalha[index - Torres[index].GetAlcance()].ReceberDano(item.Atacar());
+    }
+    if (CampoDeBatalha[index - Torres[index].GetAlcance() + 1]) {
+        CampoDeBatalha[index - Torres[index].GetAlcance() + 1].GetVida();
+        CampoDeBatalha[index - Torres[index].GetAlcance() + 1].ReceberDano(item.Atacar());
+    }
+    if (CampoDeBatalha[index + Torres[index].GetAlcance() - 1]) {
+        CampoDeBatalha[index + Torres[index].GetAlcance() - 1].GetVida();
+        CampoDeBatalha[index + Torres[index].GetAlcance() - 1].ReceberDano(item.Atacar());
+    }
+    if (CampoDeBatalha[index + Torres[index].GetAlcance()]) {
+        CampoDeBatalha[index + Torres[index].GetAlcance()].GetVida();
+        CampoDeBatalha[index + Torres[index].GetAlcance()].ReceberDano(item.Atacar());
     }
 }
