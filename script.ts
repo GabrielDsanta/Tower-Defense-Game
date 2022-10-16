@@ -146,7 +146,6 @@ function CriarTorre(){
 
 
 }
-
 function CriarInimigo(){
     let Nome = String(prompt("Qual o Nome do Inimigo ?"))
     let Vida = Number(prompt("Qual a Vida do Inimigo ?"))
@@ -164,5 +163,92 @@ function CriarInimigo(){
 }
 
 function ComeçarPartida(){
+    let VidaJogador = 10
+    let FimDeJogo = true
 
+    for (let index = 0; index < Inimigos.length; index++){
+        console.log(Inimigos.length)
+        CampoDeBatalha.push(Inimigos[index])
+    }
+    
+    while(FimDeJogo){
+        let Escolha = String(prompt("1 Passar turno /// 2 Render-se"))
+        switch(Escolha){
+
+        case "1":
+        PassarTurno()
+        break;
+
+        case "2":
+        VidaJogador = 0
+        break;
+
+        default:
+        alert("Opção Inválida")
+        break;
+        }
+
+        if(VidaJogador == 0){
+        return alert('Jogador Perdeu !')
+        }
+
+        function PassarTurno(){
+            Torres.forEach(AtaqueTorre)
+            CampoDeBatalha.forEach(RemoverInimigo)
+            MoverInimigo()
+            VerificarCampoDeBatalha()
+            console.log(CampoDeBatalha)
+            console.log(`Vida Do Jogador: ${VidaJogador}`)
+        }
+    }
+
+    function VerificarCampoDeBatalha(){
+        let Contador = 0
+
+        if(CampoDeBatalha[0] != undefined){
+            console.log(`Vida do Jogador: ${VidaJogador}`)
+            VidaJogador--
+        }
+
+        CampoDeBatalha.forEach(Verificar)
+
+        if(Contador == Inimigos.length){
+            alert("Jogador Venceu !")
+            FimDeJogo = false
+        }
+
+        function Verificar(item: object, index: number){
+            if(item == undefined){
+                Contador++
+            }
+        }
+
+    }
 }
+
+function RemoverInimigo(item: object, index: number){
+    if(item.GetVida() < 0){
+        CampoDeBatalha.splice(index, 1, undefined)
+    }
+}
+
+function MoverInimigo(){
+    if(Inimigos.length == 0){
+        CampoDeBatalha.shift()
+    }
+    else{
+        CampoDeBatalha.shift()
+        CampoDeBatalha.length++
+    }
+
+    if(CampoDeBatalha.length > 9){
+        CampoDeBatalha.pop()
+    }
+}
+
+function AtaqueTorre(item: object, index: number){
+    if(CampoDeBatalha[index] != undefined){
+        CampoDeBatalha[index].ReceberDano(item.Atacar())
+    }
+}
+
